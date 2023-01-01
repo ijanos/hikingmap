@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html lang="hu">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+    <link rel="stylesheet" href="static/leaflet.css" />
+    <script src="static/leaflet.js"></script>
+    <script src="static/gpx.js"></script>
+
+    <style>
+      html, body { height: 100%; padding: 0; margin: 0; }
+      #map { width: 100%; height: 100%; }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      const map = L.map('map').setView({lon: 19.04, lat: 47.49}, 11);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+      }).addTo(map);
+
+      L.control.scale({imperial: false, metric: true}).addTo(map);
+
+      const hikes = [
+        "gpx/2014-03-23-Rám-szakadék.gpx",
+        "gpx/2014-03-23-Rám-szakadék.kml",
+        "gpx/2015-10-04-Dobogoko.gpx",
+        "gpx/2015-10-04-Holdvilág-árok.gpx",
+        "gpx/2019-02-17-Kapolnak.gpx",
+        "gpx/2019-03-02-Cuha.gpx",
+        "gpx/2019-04-07-Ballon D'Alsace.gpx",
+        "gpx/2020-01-01-Harmashatarhegy.gpx",
+        "gpx/2020-12-28-Kekes.gpx",
+        "gpx/2021-01-09-OKT-14.gpx",
+        "gpx/2021-03-13-- OKT-13.gpx",
+        "gpx/2021-03-28-- OKT-12.gpx",
+        "gpx/2021-04-12-- OKT-17 - Nagymaros-Torokmezo.gpx",
+        "gpx/2021-04-12-Torokmezo-Zebegeny.gpx",
+        "gpx/2021-08-08 Rozsika forras.gpx",
+        "gpx/2021-06-19-Okt16.gpx",
+        "gpx/2021-09-26-Okt16–2.gpx",
+        "gpx/2021-05-09-OKT 15.gpx",
+        "gpx/merged.gpx"
+      ]
+
+
+      const baseStyle = { color: "purple", opacity: 0.8, weight: 6, lineCap: 'round' };
+      const hoverStyle = { color: "blue", opacity: 0.8, weight: 6, lineCap: 'round' };
+
+      hikes.map(addGPX);
+
+      function addGPX(gpxpath) {
+        const gpx = new L.GPX(gpxpath, {
+          async: true,
+          gpx_options: { joinTrackSegments: true, parseElements: ['track', 'route'] },
+          polyline_options: baseStyle,
+          marker_options: { startIconUrl: '', endIconUrl: '', shadowUrl: '' }
+        }).on('loaded', function(e) {
+          const name = e.target.get_name();
+          const dist = e.target.get_distance() / 1000;
+          const start = e.target.get_start_time().toISOString().split('T')[0];
+          //get_elevation_min(): returns the lowest elevation, in meters
+          //get_elevation_max(): returns the highest elevation, in meters
+          //get_elevation_gain(): returns the cumulative elevation gain, in meters
+          //get_elevation_loss(): returns the cumulative elevation loss, in meters
+          e.target.bindPopup(`${name} - ${dist.toFixed(2)} km <br> ${start}`);
+        }).on('mouseover', function(e) {
+          var layer = e.target;
+          layer.bringToFront();
+          layer.setStyle(hoverStyle);
+      }).on('mouseout', function(e) {
+        var layer = e.target;
+        layer.setStyle(baseStyle);
+    });
+
+        gpx.addTo(map);
+      };
+    </script>
+  </body>
+</html>
