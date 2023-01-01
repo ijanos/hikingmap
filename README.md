@@ -1,8 +1,11 @@
+# Hiking map
 
+### useful gpsbable commands
+
+```
 gpsbabel -w -i kml -f <INPUT_FILE_NAME.kml> -o gpx -F <OUTPUT_FILE_NAME.gpx>
+```
 
-
-###
 
 AutoExport can export gpx tracks from workouts in iPhone's health app, these gpx files contain waypoints only.
 
