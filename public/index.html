@@ -43,7 +43,11 @@
         "gpx/2021-06-19-Okt16.gpx",
         "gpx/2021-09-26-Okt16–2.gpx",
         "gpx/2021-05-09-OKT 15.gpx",
-        "gpx/merged.gpx"
+        "gpx/Morning hike.gpx",
+        "gpx/Kisvasut tura.gpx",
+        "gpx/merged.gpx",
+        "gpx/dobogoko_merged.gpx",
+	"gpx/2023-05-06-HETE_10.gpx"
       ]
 
 
@@ -51,6 +55,17 @@
       const hoverStyle = { color: "blue", opacity: 0.8, weight: 6, lineCap: 'round' };
 
       hikes.map(addGPX);
+
+      ///async function load_shapefile() {
+      ///  let url = 'gpx/merged.json';
+      ///  const response = await fetch(url)
+      ///  const shape_obj = await response.json();
+      ///  return shape_obj;
+      ///}
+
+      ///load_shapefile().then(function(geojsonData){
+      ///  L.geoJson(geojsonData).addTo(map);
+      ///});
 
       function addGPX(gpxpath) {
         const gpx = new L.GPX(gpxpath, {
