@@ -54,6 +54,7 @@
 
       const baseStyle = { color: "purple", opacity: 0.8, weight: 6, lineCap: 'round' };
       const hoverStyle = { color: "blue", opacity: 0.8, weight: 6, lineCap: 'round' };
+      let hoverActive = true;
 
       hikes.map(addGPX);
 
@@ -86,11 +87,24 @@
         }).on('mouseover', function(e) {
           var layer = e.target;
           layer.bringToFront();
+          if (hoverActive) {
+            layer.setStyle(hoverStyle);
+          }
+        }).on('mouseout', function(e) {
+          var layer = e.target;
+          if (hoverActive) {
+            layer.setStyle(baseStyle);
+          }
+        }).on('popupopen', function(e) {
+          var layer = e.target;
+          hoverActive = false;
+          layer.bringToFront();
           layer.setStyle(hoverStyle);
-      }).on('mouseout', function(e) {
-        var layer = e.target;
-        layer.setStyle(baseStyle);
-    });
+        }).on('popupclose', function(e) {
+          var layer = e.target;
+          hoverActive = true;
+          layer.setStyle(baseStyle);
+        });
 
         gpx.addTo(map);
       };
